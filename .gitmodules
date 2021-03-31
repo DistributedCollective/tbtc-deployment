@@ -1,12 +1,15 @@
 [submodule "keep-core"]
 	path = keep-core
 	url = https://github.com/rumblefishdev/keep-core.git
+	branch = master
 [submodule "keep-ecdsa"]
 	path = keep-ecdsa
 	url = https://github.com/rumblefishdev/keep-ecdsa.git
+	branch = master
 [submodule "tbtc"]
 	path = tbtc
 	url = https://github.com/rumblefishdev/tbtc.git
+	branch = master
 [submodule "tbtc-dapp"]
 	path = tbtc-dapp
 	url = https://github.com/keep-network/tbtc-dapp.git
