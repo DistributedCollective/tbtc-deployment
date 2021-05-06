@@ -1,0 +1,26 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "pwa-node",
+            "request": "launch",
+            "name": "Launch Program",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "runtimeArgs": [
+                "--experimental-json-modules"
+            ],
+            "args": [
+                "--ethereum-node=wss://testnet.sovryn.app/ws",
+                "--ethereum-pk=2d61b31f93df83e90e78b61943019f3d03fd9f31901359a0e065a4c896eee23d",
+                "--bitcoin-network=testnet",
+                "--lot-size-satoshis=1000000"
+            ],
+            "program": "${workspaceFolder}/e2e-test.js"
+        }
+    ]
+}

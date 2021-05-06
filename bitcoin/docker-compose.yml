@@ -17,7 +17,7 @@ services:
     environment:
       - DAEMON_URL=http://user:password@bitcoind:18332
       - COIN=BitcoinSegwit
-      - NET=regtest
+      - NET=testnet
       - SERVICES=tcp://0.0.0.0:50001,ssl://0.0.0.0:50002,ws://0.0.0.0:50003,wss://127.0.0.1:50004,rpc://0.0.0.0:8000
       - COST_SOFT_LIMIT=0
       - COST_HARD_LIMIT=0
