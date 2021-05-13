@@ -1,0 +1,42 @@
+version: '3'
+services:
+    keep-core:
+        build: 
+            context: ./keep-core/
+            target: app
+            args:
+                VERSION: "1.0"
+                REVISION: "1"
+        volumes:
+            - /Users/konrad/Desktop/rumble/test/:/data
+        environment: 
+            - OPERATOR_ADDRESS=0xd31653ef028dd783001bb78f8784539a44e22718
+            - OPERATOR_KEYFILE=/data/eth/keystore/UTC--2021-04-14T10-14-40.670186000Z--d31653ef028dd783001bb78f8784539a44e22718
+            - OPERATOR_DATA_DIR=/data/core/data
+            - OPERATOR_WALLET_PASSWORD=password
+            - P2P_PORT=3919
+            - P2P_PEERS_ARRAY=[]
+        restart: always
+        ports:
+            - "3919:3919"
+
+    keep-ecdsa:
+        build: 
+            context: ./keep-ecdsa/
+            target: app
+            args:
+                VERSION: "1.0"
+                REVISION: "1"
+        volumes:
+            - /Users/konrad/Desktop/rumble/test/:/data
+        environment: 
+            - OPERATOR_ADDRESS=0xd31653ef028dd783001bb78f8784539a44e22718
+            - OPERATOR_KEYFILE=/data/eth/keystore/UTC--2021-04-14T10-14-40.670186000Z--d31653ef028dd783001bb78f8784539a44e22718
+            - OPERATOR_DATA_DIR=/data/ecdsa/data1
+            - OPERATOR_WALLET_PASSWORD=password
+            - P2P_PORT=3920
+            - P2P_PEERS_ARRAY=[]
+        restart: always
+        ports:
+            - "3920:3920"
+        
