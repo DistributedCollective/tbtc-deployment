@@ -16,6 +16,8 @@ services:
             - OPERATOR_WALLET_PASSWORD=password
             - P2P_PORT=3919
             - P2P_PEERS_ARRAY=[]
+            - RSK_NODE_URL=wss://testnet.sovryn.app/ws
+            - RSK_NODE_PORT=443
         restart: always
         ports:
             - "3919:3919"
@@ -36,6 +38,8 @@ services:
             - OPERATOR_WALLET_PASSWORD=password
             - P2P_PORT=3920
             - P2P_PEERS_ARRAY=[]
+            - RSK_NODE_URL=wss://testnet.sovryn.app/ws
+            - RSK_NODE_PORT=443
         restart: always
         ports:
             - "3920:3920"

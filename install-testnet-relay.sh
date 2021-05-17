@@ -27,9 +27,9 @@ printf "${LOG_START}TestnetRelay contract address is: ${TESTNET_RELAY_CONTRACT_A
 cd $WORKDIR
 
 # Copy all config files to the right relay directory.
-cp -R configs/relays/. relays/maintainer/maintainer/config/
+cp -R configs/relays/. relays/relay/maintainer/config/
 
-cd "$WORKDIR/relays/maintainer/maintainer/config"
+cd "$WORKDIR/relays/relay/maintainer/config"
 
 # Fill SUMMA_RELAY_CONTRACT env in config file with their actual value.
 TMP_FILE=$(mktemp /tmp/.my_env_file.env.XXXXXXXXXX)
