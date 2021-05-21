@@ -16,7 +16,9 @@
 	branch = master
 [submodule "tbtc.js"]
 	path = tbtc.js
-	url = https://github.com/keep-network/tbtc.js.git
+	url = git@github.com:rumblefishdev/tbtc.js.git
+	branch = master
 [submodule "relays"]
 	path = relays
-	url = https://github.com/keep-network/relays.git
+	url = git@github.com:rumblefishdev/relays.git
+	branch = master
