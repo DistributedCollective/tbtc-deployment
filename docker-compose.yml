@@ -3,17 +3,14 @@ services:
     keep-core:
         build: 
             context: ./keep-core/
-            target: app
             args:
                 VERSION: "1.0"
                 REVISION: "1"
         volumes:
-            - /Users/konrad/Desktop/rumble/test/:/data
+            - /Users/konrad/Desktop/rumble/test/core/data:/data
         environment: 
-            - OPERATOR_ADDRESS=0xd31653ef028dd783001bb78f8784539a44e22718
-            - OPERATOR_KEYFILE=/data/eth/keystore/UTC--2021-04-14T10-14-40.670186000Z--d31653ef028dd783001bb78f8784539a44e22718
-            - OPERATOR_DATA_DIR=/data/core/data
-            - OPERATOR_WALLET_PASSWORD=password
+            - OPERATOR_KEY=5957857a88b0ab23b4f2ddd2108e99a114bca0bfe94f0fb5e503a22905e6088f
+            - OPERATOR_KEYFILE_PASSWORD=password
             - P2P_PORT=3919
             - P2P_PEERS_ARRAY=[]
             - RSK_NODE_URL=wss://testnet.sovryn.app/ws
@@ -25,17 +22,14 @@ services:
     keep-ecdsa:
         build: 
             context: ./keep-ecdsa/
-            target: app
             args:
                 VERSION: "1.0"
                 REVISION: "1"
         volumes:
-            - /Users/konrad/Desktop/rumble/test/:/data
+            - /Users/konrad/Desktop/rumble/test/ecdsa/data1:/var/data
         environment: 
-            - OPERATOR_ADDRESS=0xd31653ef028dd783001bb78f8784539a44e22718
-            - OPERATOR_KEYFILE=/data/eth/keystore/UTC--2021-04-14T10-14-40.670186000Z--d31653ef028dd783001bb78f8784539a44e22718
-            - OPERATOR_DATA_DIR=/data/ecdsa/data1
-            - OPERATOR_WALLET_PASSWORD=password
+            - OPERATOR_KEY=3c53f81b6e3da8a4818a33554bfef1eec57d45c252550c8ac1593de6f0148c46
+            - OPERATOR_KEYFILE_PASSWORD=password
             - P2P_PORT=3920
             - P2P_PEERS_ARRAY=[]
             - RSK_NODE_URL=wss://testnet.sovryn.app/ws
