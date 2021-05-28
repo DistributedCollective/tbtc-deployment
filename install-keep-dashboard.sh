@@ -14,16 +14,19 @@ printf "${LOG_START}Starting Keep Dashboard deployment...${LOG_END}"
 printf "${LOG_START}Preparing keep-core artifacts...${LOG_END}"
 
 cd $WORKDIR/keep-core/solidity
+rm artifacts
 ln -sf build/contracts artifacts
 
 printf "${LOG_START}Preparing keep-ecdsa artifacts...${LOG_END}"
 
 cd $WORKDIR/keep-ecdsa/solidity
+rm artifacts
 ln -sf build/contracts artifacts
 
 printf "${LOG_START}Preparing tBTC artifacts...${LOG_END}"
 
 cd $WORKDIR/tbtc/solidity
+rm artifacts
 ln -sf build/contracts artifacts
 
 printf "${LOG_START}Install Keep Dashboard dependencies...${LOG_END}"
@@ -44,6 +47,7 @@ cd $WORKDIR/tbtc/solidity
 npm link
 
 printf "${LOG_START}Updating Keep Dashboard configuration...${LOG_END}"
+
 
 cd $WORKDIR/keep-core/solidity/dashboard
 npm link @keep-network/keep-core @keep-network/keep-ecdsa @keep-network/tbtc
