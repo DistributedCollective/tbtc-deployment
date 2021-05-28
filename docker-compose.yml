@@ -37,4 +37,18 @@ services:
         restart: always
         ports:
             - "3920:3920"
+
+    relays:
+        network_mode: host
+        build:
+            context: ./relays/
+        environment: 
+            - BITCOIN_RPC_ADDRESS=127.0.0.1
+            - BITCOIN_RPC_PORT=6061
+            - ETH_RCP_ADDRESS=https://testnet.sovryn.app/rpc
+            - ETH_RPC_PORT=443
+            - CONTRACT_ADDRESS=0xD300c99E5C189a8BdF70Aa8eA8A2a8a681b0D0B6
+            - OPERATOR_PRIVATE_KEY=2d61b31f93df83e90e78b61943019f3d03fd9f31901359a0e065a4c896eee23d
+            - ETH_CHAIN_ID=31
+        restart: always
         
