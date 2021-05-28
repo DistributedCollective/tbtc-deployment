@@ -41,7 +41,8 @@ services:
             - "3920:3920"
 
     relays:
-        build: 
+        network_mode: host
+        build:
             context: ./relays/
         environment: 
             - BITCOIN_RPC_ADDRESS=127.0.0.1
