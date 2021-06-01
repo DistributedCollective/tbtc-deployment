@@ -1,24 +1,24 @@
 [submodule "keep-core"]
 	path = keep-core
-	url = https://github.com/DistributedCollective/keep-core.git
+	url = git@github.com:DistributedCollective/keep-core.git
 	branch = master
 [submodule "keep-ecdsa"]
 	path = keep-ecdsa
-	url = https://github.com/DistributedCollective/keep-ecdsa.git
+	url = git@github.com:DistributedCollective/keep-ecdsa.git
 	branch = master
 [submodule "tbtc"]
 	path = tbtc
-	url = https://github.com/DistributedCollective/tbtc.git
+	url = git@github.com:DistributedCollective/tbtc.git
 	branch = master
 [submodule "tbtc-dapp"]
 	path = tbtc-dapp
-	url = https://github.com/DistributedCollective/tbtc-dapp.git
+	url = git@github.com:DistributedCollective/tbtc-dapp.git
 	branch = master
 [submodule "tbtc.js"]
 	path = tbtc.js
-	url = https://github.com/DistributedCollective/tbtc.js
+	url = git@github.com:DistributedCollective/tbtc.js
 	branch = master
 [submodule "relays"]
 	path = relays
-	url = https://github.com/DistributedCollective/tbtc-relays.git
+	url = git@github.com:DistributedCollective/tbtc-relays.git
 	branch = master

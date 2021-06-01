@@ -38,13 +38,13 @@ npm install
 printf "${LOG_START}Updating Keep Dashboard dependencies...${LOG_END}"
 
 cd $WORKDIR/keep-core/solidity
-npm link
+npm link --package-lock=false
 
 cd $WORKDIR/keep-ecdsa/solidity
-npm link
+npm link --package-lock=false
 
 cd $WORKDIR/tbtc/solidity
-npm link
+npm link --package-lock=false
 
 printf "${LOG_START}Updating Keep Dashboard configuration...${LOG_END}"
 
