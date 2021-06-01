@@ -49,4 +49,18 @@ services:
             - OPERATOR_PRIVATE_KEY=2d61b31f93df83e90e78b61943019f3d03fd9f31901359a0e065a4c896eee23d
             - ETH_CHAIN_ID=31
         restart: always
+
+    keep-dashboard:
+        build:
+            context: ./keep-core/solidity/dashboard
+        ports:
+            - "8080:80"
+        restart: always
+
+    tbtc-dapp:
+        build:
+            context: ./tbtc-dapp
+        ports:
+            - "8081:80"
+        restart: always
         
