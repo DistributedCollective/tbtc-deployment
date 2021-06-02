@@ -1,10 +1,11 @@
-FROM golang:1.13.6-alpine3.10 AS gotools
+FROM golang:1.13.6-alpine3.10 AS gobuild
 
 ENV GOPATH=/go \
 	GOBIN=/go/bin \
-	APP_NAME=keep-app \
-	APP_DIR_CORE=/go/src/keep-core \
-	APP_DIR_ECDSA=/go/src/keep-ecdsa \
+	APP_NAME_CORE=keep-core \
+	APP_NAME_ECDSA=keep-ecdsa \
+	APP_DIR_CORE=keep-core \
+	APP_DIR_ECDSA=keep-ecdsa \
 	BIN_PATH=/usr/local/bin \
 	LD_LIBRARY_PATH=/usr/local/lib/ \
 	GO111MODULE=on
@@ -23,23 +24,39 @@ RUN apk add --update --no-cache \
 
 COPY --from=ethereum/solc:0.5.17 /usr/bin/solc /usr/bin/solc
 
-FROM gotools AS gobuild
-
 ARG VERSION
 ARG REVISION
 
-RUN mkdir -p $APP_DIR_CORE
+# RUN mkdir -p $APP_DIR_CORE
 
-WORKDIR $APP_DIR_CORE
-COPY . $APP_DIR/
 
-RUN GOOS=linux go build -ldflags "-X main.version=$VERSION -X main.revision=$REVISION" -a -o $APP_NAME ./ && \
-	mv $APP_NAME $BIN_PATH
+
+WORKDIR /
+
+COPY . .
+# COPY . $APP_DIR/
+RUN cd $APP_DIR_ECDSA && go mod download
+
+RUN cd /go/pkg/mod/github.com/gogo/protobuf@v1.3.1/protoc-gen-gogoslick && go install .
+RUN cd /go/pkg/mod/github.com/ethereum/go-ethereum@v1.9.10/cmd/abigen && go install .
+
+RUN cd $APP_DIR_ECDSA && export PATH=$PATH:$GOPATH/bin && GOOS=linux go generate ./...
+
+
+RUN cd $APP_DIR_ECDSA && GOOS=linux go build -ldflags "-X main.version=$VERSION -X main.revision=$REVISION" -a -o $APP_NAME_ECDSA ./ && \
+	mv $APP_NAME_ECDSA $BIN_PATH
+
+RUN cd $APP_DIR_CORE && GOOS=linux go build -ldflags "-X main.version=$VERSION -X main.revision=$REVISION" -a -o $APP_NAME_CORE ./ && \
+	mv $APP_NAME_CORE $BIN_PATH
+# RUN mkdir -p $APP_DIR_ECDSA
+
+
+
 
 FROM node:15-alpine
 
-ENV APP_NAME=keep-app \
-	BIN_PATH=/usr/local/bin
+# ENV APP_NAME=keep-app \
+# 	BIN_PATH=/usr/local/bin
 
 RUN apk add --update --no-cache git geth jq curl python3 && ln -sf python3 /usr/bin/python
 
@@ -48,9 +65,13 @@ RUN ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
 
 RUN npm i -g pm2
 
-COPY --from=gobuild $BIN_PATH/$APP_NAME $BIN_PATH
+WORKDIR /
 
-COPY ./configs/config.local.1.toml ./config.toml
+COPY --from=gobuild $BIN_PATH/$APP_NAME_CORE $BIN_PATH
+COPY --from=gobuild $BIN_PATH/$APP_NAME_ECDSA $BIN_PATH
+
+COPY ./keep-core/configs/config.local.1.toml ./config-core.toml
+COPY ./keep-ecdsa/configs/config.local.1.toml ./config-ecdsa.toml
 COPY entrypoint.sh .
 
 RUN git clone https://github.com/rumblefishdev/tbtc-rsk-proxy.git proxy
