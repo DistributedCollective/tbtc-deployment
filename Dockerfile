@@ -1,5 +1,8 @@
 FROM golang:1.13.6-alpine3.10 AS gobuild
 
+ARG VERSION
+ARG REVISION
+
 ENV GOPATH=/go \
 	GOBIN=/go/bin \
 	APP_NAME_CORE=keep-core \
@@ -14,6 +17,7 @@ RUN apk add --update --no-cache \
 	g++ \
 	linux-headers \
 	protobuf \
+	jq \
 	git \
   nodejs \
   npm \
@@ -24,17 +28,13 @@ RUN apk add --update --no-cache \
 
 COPY --from=ethereum/solc:0.5.17 /usr/bin/solc /usr/bin/solc
 
-ARG VERSION
-ARG REVISION
 
-# RUN mkdir -p $APP_DIR_CORE
-
-
-
-WORKDIR /
+WORKDIR /app
 
 COPY . .
-# COPY . $APP_DIR/
+
+RUN ./fix-links.sh
+
 RUN cd $APP_DIR_ECDSA && go mod download
 
 RUN cd /go/pkg/mod/github.com/gogo/protobuf@v1.3.1/protoc-gen-gogoslick && go install .
@@ -48,19 +48,18 @@ RUN cd $APP_DIR_ECDSA && GOOS=linux go build -ldflags "-X main.version=$VERSION 
 
 RUN cd $APP_DIR_CORE && GOOS=linux go build -ldflags "-X main.version=$VERSION -X main.revision=$REVISION" -a -o $APP_NAME_CORE ./ && \
 	mv $APP_NAME_CORE $BIN_PATH
-# RUN mkdir -p $APP_DIR_ECDSA
-
 
 
 
 FROM node:15-alpine
 
-# ENV APP_NAME=keep-app \
-# 	BIN_PATH=/usr/local/bin
+ENV APP_NAME_CORE=keep-core \
+	APP_NAME_ECDSA=keep-ecdsa \
+	BIN_PATH=/usr/local/bin
 
 RUN apk add --update --no-cache git geth jq curl python3 && ln -sf python3 /usr/bin/python
 
-RUN curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip" && unzip awscli-bundle.zip
+RUN curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip" && unzip awscli-bundle.zip && rm awscli-bundle.zip
 RUN ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
 
 RUN npm i -g pm2
