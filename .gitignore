@@ -7,3 +7,4 @@ vagrant-box
 *.log
 e2e/site/index.html
 .envrc
+.vscode

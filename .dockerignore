@@ -1,0 +1,17 @@
+**/node_modules/*
+
+/tbtc.js
+/tbtc-dapp
+/relays
+/relay-genesis
+/inspector
+/ethereum
+/e2e
+/docs
+/deployments
+/configs
+/bitcoind-wallet
+/bitcoin
+/.vscode
+/.github
+/.circleci
