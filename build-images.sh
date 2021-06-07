@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+WORKDIR=$PWD
+
 VERSION=$1
 REVISION=$2
 
@@ -14,14 +16,8 @@ if [ -z "$REVISION" ]; then
     exit 1
 fi
 
-echo "Building tbtc-core..."
-cd keep-core
-docker build -t sovryn/tbtc-core:${version} --build-arg VERSION=${version} --build-arg REVISION=${revision} .
-docker push sovryn/tbtc-core:$version
-cd ..
+echo "Building tbtc-app..."
+docker build -t sovryn/tbtc-app:${VERSION} --build-arg VERSION=${VERSION} --build-arg REVISION=${REVISION} .
+docker push sovryn/tbtc-app:${VERSION}
 
-echo "Building tbtc-ecdsa..."
-cd keep-ecdsa
-docker build -t sovryn/tbtc-ecdsa:$version --build-arg VERSION=${version} --build-arg REVISION=${revision} .
-docker push sovryn/tbtc-ecdsa:$version
-cd ..
+cd $WORKDIR
