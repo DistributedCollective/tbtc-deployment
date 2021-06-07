@@ -56,8 +56,8 @@ if [[ -z "${OPERATOR_KEY}" ]]; then
     echo "OPERATOR_KEY env not set. Fetching from AWS Secrets Manager..."
     AWS_INSTANCE_ID=$(curl --silent http://169.254.169.254/latest/meta-data/instance-id)
     AWS_REGION=$(curl --silent http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region)
-    OPERATOR_KEY_NAME=`aws ec2 describe-instances --filters Name=instance-id,Values=$AWS_INSTANCE_ID --query "Reservations[].Instances[].Tags[?Key == 'Name'].Value" --output text`
-    OPERATOR_KEY=`aws secretsmanager get-secret-value --secret-id $OPERATOR_KEY_NAME --region $AWS_REGION | jq -r .SecretString`
+    OPERATOR_KEY_NAME=$(aws ec2 describe-instances --filters Name=instance-id,Values=$AWS_INSTANCE_ID --query "Reservations[].Instances[].Tags[?Key == 'Name'].Value" --output text)
+    OPERATOR_KEY=$(aws secretsmanager get-secret-value --secret-id $OPERATOR_KEY_NAME --region $AWS_REGION | jq -r .SecretString)
 fi
 
 mkdir $TMP_FOLDER $TMP_GETH_DATADIR
