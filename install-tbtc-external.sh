@@ -3,7 +3,7 @@ set -e
 
 WORKDIR=$PWD
 
-sudo apt-get install -y git docker docker-compose
+sudo apt-get install -y git docker docker-compose unzip
 
 sudo usermod -aG docker $USER
 
