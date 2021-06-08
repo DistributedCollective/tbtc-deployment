@@ -5,10 +5,9 @@ WORKDIR=$PWD
 
 sudo apt-get install -y git docker docker-compose unzip
 
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
-sudo ./aws/install || true
-rm -rf awscliv2.zip aws
+sudo usermod -aG docker $USER
+
+newgrp docker
 
 git clone --depth 1 https://github.com/DistributedCollective/tbtc-deployment.git tbtc-deployment
 
