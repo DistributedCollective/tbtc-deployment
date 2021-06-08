@@ -20,6 +20,10 @@ function set_config_object() {
     sed -i "s/\(${1//\//\\/} *= *\).*/\1${2//\//\\/}/" $3
 }
 
+function set_config_object_noExpand() {
+    sed "s/\(${1//\//\\/} *= *\).*/\1${2}/" $3
+}
+
 if [[ -z "${CORE_MODE}" ]]; then
     OPERATOR_CONFIG_FILE="/config-ecdsa.toml"
 else 
@@ -48,7 +52,7 @@ fi
 
 if [[ -z "${P2P_PEERS_ARRAY}" ]]; then
     echo "P2P_PEERS_ARRAY env not set. Defaulting to empty."
-    P2P_PEERS_ARRAY="[]"
+    P2P_PEERS_ARRAY='[]'
 fi
 
 
@@ -58,6 +62,11 @@ if [[ -z "${OPERATOR_KEY}" ]]; then
     AWS_REGION=$(curl --silent http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region)
     OPERATOR_KEY_NAME=$(aws ec2 describe-instances --filters Name=instance-id,Values=$AWS_INSTANCE_ID --query "Reservations[].Instances[].Tags[?Key == 'Name'].Value" --output text)
     OPERATOR_KEY=$(aws secretsmanager get-secret-value --secret-id $OPERATOR_KEY_NAME --region $AWS_REGION | jq -r .SecretString)
+fi
+
+if [[ -z "${OPERATOR_KEY}" ]]; then
+    echo "Could not fetch the OPERATOR_KEY from aws secret manager."
+    exit 1
 fi
 
 mkdir $TMP_FOLDER $TMP_GETH_DATADIR
@@ -86,7 +95,7 @@ set_config_string "KeyFile" $OPERATOR_KEYFILE_PATH $OPERATOR_CONFIG_FILE
 set_config_string "DataDir" $OPERATOR_DATA_DIR $OPERATOR_CONFIG_FILE
 
 set_config_object "Port" $P2P_PORT $OPERATOR_CONFIG_FILE
-set_config_object "Peers" $P2P_PEERS_ARRAY $OPERATOR_CONFIG_FILE
+set_config_object_noExpand "Peers" "$P2P_PEERS_ARRAY" $OPERATOR_CONFIG_FILE
 
 cd proxy
 TARGET_URL=$RSK_NODE_URL \
@@ -98,10 +107,9 @@ MUTE_LOGGING=0 \
 pm2 start eth.js --name eth-rsk-proxy
 cd ..
 
+BINARY=keep-ecdsa
 if [[ -z "${CORE_MODE}" ]]; then
-    echo "RUNNING ECDSA"
-    PM2_PUBLIC_KEY=$PM2_PUBLIC_KEY PM2_PRIVATE_KEY=$PM2_PRIVATE_KEY KEEP_ETHEREUM_PASSWORD=$OPERATOR_KEYFILE_PASSWORD LOG_LEVEL=$LOG_LEVEL keep-ecdsa --config $OPERATOR_CONFIG_FILE start
-else 
-    echo "RUNNING CORE"
-    PM2_PUBLIC_KEY=$PM2_PUBLIC_KEY PM2_PRIVATE_KEY=$PM2_PRIVATE_KEY KEEP_ETHEREUM_PASSWORD=$OPERATOR_KEYFILE_PASSWORD LOG_LEVEL=$LOG_LEVEL keep-core --config $OPERATOR_CONFIG_FILE start
+    BINARY=keep-core
 fi
+
+PM2_PUBLIC_KEY=$PM2_PUBLIC_KEY PM2_PRIVATE_KEY=$PM2_PRIVATE_KEY KEEP_ETHEREUM_PASSWORD=$OPERATOR_KEYFILE_PASSWORD LOG_LEVEL=$LOG_LEVEL $BINARY --config $OPERATOR_CONFIG_FILE start
