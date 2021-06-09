@@ -109,12 +109,4 @@ MUTE_LOGGING=0 \
 pm2 start eth.js --name eth-rsk-proxy
 cd ..
 
-<<<<<<< HEAD
-=======
-BINARY=keep-ecdsa
-if [[ -z "${CORE_MODE}" ]]; then
-    BINARY=keep-core
-fi
-
->>>>>>> 49a116894da997b5f8af15f81240568b16b8982c
 PM2_PUBLIC_KEY=$PM2_PUBLIC_KEY PM2_PRIVATE_KEY=$PM2_PRIVATE_KEY KEEP_ETHEREUM_PASSWORD=$OPERATOR_KEYFILE_PASSWORD LOG_LEVEL=$LOG_LEVEL $BINARY --config $OPERATOR_CONFIG_FILE start
