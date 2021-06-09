@@ -59,8 +59,8 @@ ENV APP_NAME_CORE=keep-core \
 
 RUN apk add --update --no-cache git geth jq curl python3 && ln -sf python3 /usr/bin/python
 
-ENV GLIBC_VER=2.31-r0
 
+ENV GLIBC_VER=2.31-r0
 RUN apk --no-cache add \
         binutils \
     && curl -sL https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub -o /etc/apk/keys/sgerrand.rsa.pub \
