@@ -33,7 +33,7 @@ printf "${LOG_START}Install Keep Dashboard dependencies...${LOG_END}"
 
 cd $WORKDIR/keep-core/solidity/dashboard
 
-npm install
+npm install --package-lock=false
 
 printf "${LOG_START}Updating Keep Dashboard dependencies...${LOG_END}"
 
