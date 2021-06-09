@@ -21,7 +21,7 @@ function set_config_object() {
 }
 
 function set_config_object_noExpand() {
-    sed "s/\(${1//\//\\/} *= *\).*/\1${2}/" $3
+    sed -i "s/\(${1//\//\\/} *= *\).*/\1${2}/" $3
 }
 
 if [[ -z "${CORE_MODE}" ]]; then
