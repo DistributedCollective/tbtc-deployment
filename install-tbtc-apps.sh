@@ -21,7 +21,7 @@ docker build --build-arg VERSION=$VERSION --build-arg REVISION=$REVISION -t $IMA
 
 mkdir -p $MOUNT_PATH/core
 docker run --restart=always -d \
-    -–expose $P2P_PORT_CORE \
+    --expose $P2P_PORT_CORE \
     -e CORE_MODE=1 \
     -e P2P_PORT=$P2P_PORT_CORE \
     -e P2P_PEERS_ARRAY=$P2P_PEERS_ARRAY \
@@ -31,7 +31,7 @@ docker run --restart=always -d \
 
 mkdir -p $MOUNT_PATH/ecdsa
 docker run --restart=always -d \
-    -–expose $P2P_PORT_ECDSA \
+    --expose $P2P_PORT_ECDSA \
     -e P2P_PORT=$P2P_PORT_ECDSA \
     -e P2P_PEERS_ARRAY=$P2P_PEERS_ARRAY \
     -e RSK_NODE_PORT=$RSK_NODE_PORT \
