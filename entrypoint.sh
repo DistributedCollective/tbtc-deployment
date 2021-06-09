@@ -25,9 +25,11 @@ function set_config_object_noExpand() {
 }
 
 if [[ -z "${CORE_MODE}" ]]; then
+    BINARY=keep-ecdsa
     OPERATOR_CONFIG_FILE="/config-ecdsa.toml"
 else 
     OPERATOR_CONFIG_FILE="/config-core.toml"
+    BINARY=keep-core
 fi
 
 if [[ ! -d "$OPERATOR_DATA_DIR" ]]; then
@@ -106,10 +108,5 @@ MATCH_REQUESTS=0 \
 MUTE_LOGGING=0 \
 pm2 start eth.js --name eth-rsk-proxy
 cd ..
-
-BINARY=keep-ecdsa
-if [[ -z "${CORE_MODE}" ]]; then
-    BINARY=keep-core
-fi
 
 PM2_PUBLIC_KEY=$PM2_PUBLIC_KEY PM2_PRIVATE_KEY=$PM2_PRIVATE_KEY KEEP_ETHEREUM_PASSWORD=$OPERATOR_KEYFILE_PASSWORD LOG_LEVEL=$LOG_LEVEL $BINARY --config $OPERATOR_CONFIG_FILE start
