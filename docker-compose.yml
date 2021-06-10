@@ -65,4 +65,16 @@ services:
         ports:
             - "8081:80"
         restart: always
+
+    electrumx:
+        network_mode: host
+        build: 
+            context: ./bitcoin/electrumx
+        environment:
+            - DAEMON_URL=http://user:password@127.0.0.1:6061
+            - COIN=BitcoinSegwit
+            - NET=testnet
+            - SERVICES=tcp://0.0.0.0:50001,ssl://0.0.0.0:50002,ws://0.0.0.0:50003,wss://0.0.0.0:8080,rpc://0.0.0.0:8000
+            - COST_SOFT_LIMIT=0
+            - COST_HARD_LIMIT=0
         
