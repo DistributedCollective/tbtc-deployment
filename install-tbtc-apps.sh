@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 WORKDIR=$PWD
@@ -6,12 +6,29 @@ WORKDIR=$PWD
 ./install-repositories.sh
 
 MOUNT_PATH=/data
-P2P_PORT_CORE=3920
-P2P_PORT_ECDSA=3921
 
-P2P_CORE_PEERS_ARRAY='[]'
-P2P_ECDSA_PEERS_ARRAY='[]'
+if [[ -z "${P2P_PORT_CORE}" ]]; then
+    P2P_PORT_CORE=3920
+fi
+echo "using p2p core port: $P2P_PORT_CORE"
 
+
+if [[ -z "${P2P_PORT_ECDSA}" ]]; then
+    P2P_PORT_ECDSA=3921
+fi
+echo "using p2p ecdsa port: $P2P_PORT_ECDSA"
+
+
+if [[ -z "${P2P_CORE_PEERS_ARRAY}" ]]; then
+    P2P_CORE_PEERS_ARRAY='[]'
+fi
+echo "using p2p core peers array: $P2P_CORE_PEERS_ARRAY"
+
+
+if [[ -z "${P2P_ECDSA_PEERS_ARRAY}" ]]; then
+    P2P_ECDSA_PEERS_ARRAY='[]'
+fi
+echo "using p2p ecdsa peers array: $P2P_ECDSA_PEERS_ARRAY"
 
 RSK_NODE_URL=wss://testnet.sovryn.app/ws
 RSK_NODE_PORT=443
@@ -23,7 +40,7 @@ docker build --build-arg VERSION=$VERSION --build-arg REVISION=$REVISION -t $IMA
 
 mkdir -p $MOUNT_PATH/core
 docker run --restart=always -d \
-    --expose $P2P_PORT_CORE \
+    --net=host \
     -e CORE_MODE=1 \
     -e P2P_PORT=$P2P_PORT_CORE \
     -e P2P_PEERS_ARRAY="$P2P_CORE_PEERS_ARRAY" \
@@ -33,7 +50,7 @@ docker run --restart=always -d \
 
 mkdir -p $MOUNT_PATH/ecdsa
 docker run --restart=always -d \
-    --expose $P2P_PORT_ECDSA \
+    --net=host \
     -e P2P_PORT=$P2P_PORT_ECDSA \
     -e P2P_PEERS_ARRAY="$P2P_ECDSA_PEERS_ARRAY" \
     -e RSK_NODE_PORT=$RSK_NODE_PORT \
