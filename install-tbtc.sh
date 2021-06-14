@@ -9,7 +9,19 @@ DONE_END='\n\n\e[0m'    # new line + reset
 
 WORKDIR=$PWD
 
-BTC_NETWORK="testnet"
+if [[ -z "${BTC_NETWORK}" ]]; then
+  echo "BTC_NETWORK env not set. Exiting"
+  exit 1
+else
+  echo "Using network ${BTC_NETWORK}"
+fi
+
+if [[ -z "${DEST_NETWORK}" ]]; then
+  echo "DEST_NETWORK env not set. Exiting"
+  exit 1
+else
+  echo "Using network ${DEST_NETWORK}"
+fi
 
 while getopts n: option; do
   case "${option}" in
@@ -66,7 +78,7 @@ cd "$WORKDIR/tbtc/solidity"
 if [ "$BTC_NETWORK" == "regtest" ]; then
   printf "${LOG_START}Initialize MockRelay...${LOG_END}"
 
-  npx truffle --network sov exec "$WORKDIR/relay-genesis/update-mock-relay.js"
+  npx truffle --network $DEST_NETWORK exec "$WORKDIR/relay-genesis/update-mock-relay.js"
 fi
 
 printf "${DONE_START}tBTC deployed successfully!${DONE_END}"
@@ -76,7 +88,7 @@ printf "${DONE_START}tBTC deployed successfully!${DONE_END}"
 printf "${LOG_START}Initializing keep-ecdsa...${LOG_END}"
 
 # Get network ID.
-NETWORK_ID_OUTPUT=$(npx truffle --network sov exec ./scripts/get-network-id.js)
+NETWORK_ID_OUTPUT=$(npx truffle --network $DEST_NETWORK exec ./scripts/get-network-id.js)
 NETWORK_ID=$(echo "$NETWORK_ID_OUTPUT" | tail -1)
 
 # Extract TBTCSystem contract address.
@@ -89,6 +101,6 @@ printf "${LOG_START}TBTCSystem contract address is: ${TBTC_SYSTEM_CONTRACT_ADDRE
 cd "$WORKDIR/keep-ecdsa"
 
 # Run keep-ecdsa initialization script.
-./scripts/initialize.sh --network sov --application-address $TBTC_SYSTEM_CONTRACT_ADDRESS
+./scripts/initialize.sh --network $DEST_NETWORK --application-address $TBTC_SYSTEM_CONTRACT_ADDRESS
 
 printf "${DONE_START}keep-ecdsa initialized successfully!${DONE_END}"

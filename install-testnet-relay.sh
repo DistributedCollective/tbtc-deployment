@@ -9,12 +9,19 @@ DONE_END='\n\n\e[0m'    # new line + reset
 
 WORKDIR=$PWD
 
+if [[ -z "${DEST_NETWORK}" ]]; then
+  echo "DEST_NETWORK env not set. Exiting"
+  exit 1
+else
+  echo "Using network ${DEST_NETWORK}"
+fi
+
 printf "${LOG_START}Initializing relay...${LOG_END}"
 
 cd "$WORKDIR/tbtc/solidity"
 
 # Get network ID.
-NETWORK_ID_OUTPUT=$(npx truffle --network sov exec ./scripts/get-network-id.js)
+NETWORK_ID_OUTPUT=$(npx truffle --network $DEST_NETWORK exec ./scripts/get-network-id.js)
 NETWORK_ID=$(echo "$NETWORK_ID_OUTPUT" | tail -1)
 
 # Extract TestnetRelay contract address.
