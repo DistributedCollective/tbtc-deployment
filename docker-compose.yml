@@ -10,7 +10,6 @@ services:
             - /data:/data
         environment: 
             - CORE_MODE=1
-            - OPERATOR_KEY=5957857a88b0ab23b4f2ddd2108e99a114bca0bfe94f0fb5e503a22905e6088f
             - P2P_PORT=3919
             - P2P_PEERS_ARRAY=[]
             - RSK_NODE_URL=wss://testnet.sovryn.app/ws
@@ -29,7 +28,6 @@ services:
             - /data:/data
         environment:
             - CORE_MODE=0
-            - OPERATOR_KEY=3c53f81b6e3da8a4818a33554bfef1eec57d45c252550c8ac1593de6f0148c46
             - P2P_PORT=3920
             - P2P_PEERS_ARRAY=[]
             - RSK_NODE_URL=wss://testnet.sovryn.app/ws
@@ -37,20 +35,6 @@ services:
         restart: always
         ports:
             - "3920:3920"
-
-    relays:
-        network_mode: host
-        build:
-            context: ./relays/
-        environment: 
-            - BITCOIN_RPC_ADDRESS=127.0.0.1
-            - BITCOIN_RPC_PORT=6061
-            - ETH_RCP_ADDRESS=https://testnet.sovryn.app/rpc
-            - ETH_RPC_PORT=443
-            - CONTRACT_ADDRESS=0xD300c99E5C189a8BdF70Aa8eA8A2a8a681b0D0B6
-            - OPERATOR_PRIVATE_KEY=2d61b31f93df83e90e78b61943019f3d03fd9f31901359a0e065a4c896eee23d
-            - ETH_CHAIN_ID=31
-        restart: always
 
     keep-dashboard:
         build:
@@ -66,6 +50,20 @@ services:
             - "8081:80"
         restart: always
 
+    relay:
+        network_mode: host
+        build:
+            context: ./relays/
+        environment: 
+            - BITCOIN_RPC_ADDRESS=127.0.0.1
+            - BITCOIN_RPC_PORT=6061
+            - ETH_RCP_ADDRESS=https://testnet.sovryn.app/rpc
+            - ETH_RPC_PORT=443
+            - CONTRACT_ADDRESS=0xD300c99E5C189a8BdF70Aa8eA8A2a8a681b0D0B6
+            - OPERATOR_PRIVATE_KEY=2d61b31f93df83e90e78b61943019f3d03fd9f31901359a0e065a4c896eee23d
+            - ETH_CHAIN_ID=31
+        restart: always
+
     electrumx:
         network_mode: host
         build: 
@@ -74,7 +72,33 @@ services:
             - DAEMON_URL=http://user:password@127.0.0.1:6061
             - COIN=BitcoinSegwit
             - NET=testnet
+            - SERVICES=tcp://0.0.0.0:50001,ssl://0.0.0.0:50002,wss://0.0.0.0:9020,ws://0.0.0.0:9021,rpc://0.0.0.0:8000
+            - COST_SOFT_LIMIT=0
+            - COST_HARD_LIMIT=0
+        volumes:
+            - /home/ubuntu/electrumx:/data
+
+    bitcoind:
+        build: 
+            context: ./bitcoin/bitcoind
+        ports:
+            - 18332:18332
+
+    electrumx-local:
+        build: 
+            context: ./bitcoin/electrumx
+        ports:
+            - 50001:50001
+            - 50002:50002
+            - 50003:50003
+            - 50004:50004
+            - 8000:8000
+        environment:
+            - DAEMON_URL=http://user:password@bitcoind:18332
+            - COIN=BitcoinSegwit
+            - NET=regtest
             - SERVICES=tcp://0.0.0.0:50001,ssl://0.0.0.0:50002,ws://0.0.0.0:50003,wss://0.0.0.0:8080,rpc://0.0.0.0:8000
             - COST_SOFT_LIMIT=0
             - COST_HARD_LIMIT=0
+
         

@@ -9,4 +9,4 @@ LOG_END='\n\e[0m' # new line + reset color
 
 printf "${LOG_START}Starting bitcoind and electrumX...${LOG_END}"
 
-docker-compose -f ./bitcoin/docker-compose.yml up bitcoind electrumx-local
+docker-compose -f ./docker-compose.yml up bitcoind electrumx-local
