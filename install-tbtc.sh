@@ -23,6 +23,11 @@ else
   echo "Using network ${DEST_NETWORK}"
 fi
 
+if [[ -z "${RELAY_OWNER_ADDRESS}" ]]; then
+  echo "RELAY_OWNER_ADDRESS env not set. Exiting"
+  exit 1
+fi
+
 while getopts n: option; do
   case "${option}" in
   n) BTC_NETWORK=${OPTARG};;

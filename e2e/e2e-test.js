@@ -21,22 +21,26 @@ import {
 } from "./common.js";
 import bcoin from "bcoin"
 import wif from "wif"
-import program from "commander"
+import localProgram from "./conf-local.js"
+import testnetProgram from "./conf-testnet.js"
 
-program
-    .option('--bitcoin-electrum-host <host>', "electrum server host", "127.0.0.1")
-    .option('--bitcoin-electrum-port <port>', "electrum server port", (port) => parseInt(port, 10), 50003)
-    .option('--bitcoin-network <network>', "type of the bitcoin network (\"regtest\"|\"testnet\")", "regtest")
-    .option('--bitcoin-depositor-pk <privateKey>', "private key of the Bitcoin depositor in WIF format", "cTj6Z9fxMr4pzfpUhiN8KssVzZjgQz9zFCfh87UrH8ZLjh3hGZKF")
-    .option('--ethereum-node <url>', "ethereum node url", "ws://127.0.0.1:8546")
-    .option('--ethereum-pk <privateKey>', "private key of ethereum account", "f95e1da038f1fd240cb0c966d8826fb5c0369407f76f34736a5c381da7ca0ecd")
-    .option('--lot-size-satoshis <lot>', "lot size in satoshis", (lot) => parseInt(lot, 10), 1000000)
-    .parse(process.argv)
+let program
+
+if(process.env.DEST_NETWORK === "local") {
+    program = localProgram()
+} else if(process.env.DEST_NETWORK === "sov") {
+    program = testnetProgram()
+} else {
+    console.error(`err: cannot find config for ${process.env.DEST_NETWORK} network`)
+    process.exit(1)
+}
+
+program.parse(process.argv)
 
 console.log("\nScript options values: ", program.opts(), "\n")
 
 const depositsCount = 2
-const signerFeeDivisor = 0.0005 // 0.05%
+const signerFeeDivisor = 0.001 // 0.1%
 const satoshiMultiplier = 10000000000 // 10^10
 const tbtcDepositAmount = program.lotSizeSatoshis * satoshiMultiplier
 const signerFee = signerFeeDivisor * tbtcDepositAmount
