@@ -72,7 +72,7 @@ services:
             - DAEMON_URL=http://user:password@127.0.0.1:6061
             - COIN=BitcoinSegwit
             - NET=testnet
-            - SERVICES=tcp://0.0.0.0:50001,ssl://0.0.0.0:50002,wss://0.0.0.0:9020,ws://0.0.0.0:9021,rpc://0.0.0.0:8000
+            - SERVICES=ws://0.0.0.0:9020,rpc://0.0.0.0:8000
             - COST_SOFT_LIMIT=0
             - COST_HARD_LIMIT=0
         volumes:
