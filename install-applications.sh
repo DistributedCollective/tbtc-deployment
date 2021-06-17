@@ -6,7 +6,7 @@ if [[ -z "${BTC_NETWORK}" ]]; then
   echo "BTC_NETWORK env not set. Exiting"
   exit 1
 else
-  echo "Using network ${BTC_NETWORK}"
+  echo "Using BTC network ${BTC_NETWORK}"
 fi
 
 if [[ -z "${DEST_NETWORK}" ]]; then
@@ -14,6 +14,20 @@ if [[ -z "${DEST_NETWORK}" ]]; then
   exit 1
 else
   echo "Using network ${DEST_NETWORK}"
+fi
+
+if [[ -z "${INITIALIZE_OPERATORS}" ]]; then
+  echo "INITIALIZE_OPERATORS env not set, Exiting"
+  exit 1
+elif [[ $INITIALIZE_OPERATORS == 0 ]]; then
+  echo "initializing operators disabled"
+else
+  echo "initializing operators enabled"
+fi
+
+if [[ -z "${RELAY_OWNER_ADDRESS}" ]]; then
+  echo "RELAY_OWNER_ADDRESS env not set. Exiting"
+  exit 1
 fi
 
 # Install KEEP-CORE.
