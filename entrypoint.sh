@@ -25,11 +25,13 @@ function set_config_object_noExpand() {
 }
 
 if [[ -z "${CORE_MODE}" ]]; then
-    BINARY=keep-ecdsa
     OPERATOR_CONFIG_FILE="/config-ecdsa.toml"
+    BINARY=keep-ecdsa
+    DST_PROXY_PORT=5051
 else 
     OPERATOR_CONFIG_FILE="/config-core.toml"
     BINARY=keep-core
+    DST_PROXY_PORT=5050
 fi
 
 if [[ ! -d "$OPERATOR_DATA_DIR" ]]; then
@@ -99,10 +101,13 @@ set_config_string "DataDir" $OPERATOR_DATA_DIR $OPERATOR_CONFIG_FILE
 set_config_object "Port" $P2P_PORT $OPERATOR_CONFIG_FILE
 set_config_object_noExpand "Peers" "$P2P_PEERS_ARRAY" $OPERATOR_CONFIG_FILE
 
+set_config_string "URL" "ws://127.0.0.1:$DST_PROXY_PORT" $OPERATOR_CONFIG_FILE
+set_config_string "URLRPC" "http://127.0.0.1:$DST_PROXY_PORT" $OPERATOR_CONFIG_FILE
+
 cd proxy
 TARGET_URL=$RSK_NODE_URL \
 TARGET_PORT=$RSK_NODE_PORT \
-PROXY_PORT=5050 \
+PROXY_PORT=$DST_PROXY_PORT \
 HTTP_MODE=0 \
 MATCH_REQUESTS=0 \
 MUTE_LOGGING=0 \
