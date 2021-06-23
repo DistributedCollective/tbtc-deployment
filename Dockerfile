@@ -97,7 +97,7 @@ COPY ./keep-core/configs/config.local.1.toml ./config-core.toml
 COPY ./keep-ecdsa/configs/config.local.1.toml ./config-ecdsa.toml
 COPY entrypoint.sh .
 
-RUN git clone https://github.com/rumblefishdev/tbtc-rsk-proxy.git proxy
+RUN git clone https://github.com/DistributedCollective/tbtc-rsk-proxy.git proxy
 RUN cd proxy/node-http-proxy && npm install
 RUN cd proxy && npm install
 
