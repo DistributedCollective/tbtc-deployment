@@ -19,9 +19,8 @@ ENV HOME /data
 ENV EVENT_LOOP_POLICY uvloop
 ENV ALLOW_ROOT 1
 ENV DB_DIRECTORY /data/db
-ENV SSL_CERTFILE ${DB_DIRECTORY}/electrumx.crt
-ENV SSL_KEYFILE ${DB_DIRECTORY}/electrumx.key
 ENV HOST ""
 WORKDIR /data
+RUN mkdir db
 
 CMD ["init"]

@@ -40,7 +40,7 @@ program.parse(process.argv)
 console.log("\nScript options values: ", program.opts(), "\n")
 
 const depositsCount = 2
-const signerFeeDivisor = 0.001 // 0.1%
+const signerFeeDivisor = 0.0005 // 0.05%
 const satoshiMultiplier = 10000000000 // 10^10
 const tbtcDepositAmount = program.lotSizeSatoshis * satoshiMultiplier
 const signerFee = signerFeeDivisor * tbtcDepositAmount
